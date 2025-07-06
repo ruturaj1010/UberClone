@@ -1,20 +1,20 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
-const mongoose = require('mongoose');
+const cors = require("cors");
+const main = require("./db/db")
+
+main();
 
 const app = express();
 
-main().then(res =>{
-    console.log("DB connected successfully")
-}).catch(err => console.log(err));
-
-async function main() {
-    await mongoose.connect('mongodb+srv://ruturajnikam1010:Lnwrlcoiq8xIzk6Y@uberdb.yga0ugo.mongodb.net/?retryWrites=true&w=majority&appName=Uberdb');
-}
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.send("Welcome to home page");
 })
 
-app.listen(8080, () => {
-    console.log("Server is running on port successfully")
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port successfully ${process.env.PORT}`)
 })
