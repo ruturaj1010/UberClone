@@ -20,8 +20,6 @@ app.get("/", (req, res) => {
     res.send("Welcome to home page");
 })
 
-
-
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port successfully ${process.env.PORT}`)
 })
