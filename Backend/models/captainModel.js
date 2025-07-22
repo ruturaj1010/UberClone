@@ -40,7 +40,7 @@ const captainSchema = new mongoose.Schema({
         default: "inactive"
     },
 
-    vahicle: {
+    vehicle: {
         color: {
             type: String,
             required: true,
