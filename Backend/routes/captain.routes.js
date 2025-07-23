@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const captainController = require('../controllers/captainController');
+const authMiddleware = require("../middlewares/auth.middleware")
 
 const { body } = require("express-validator")
 
@@ -34,6 +35,19 @@ router.post("/register", [
     body("vehicle.vehicleType")
         .notEmpty().withMessage("Vehicle type is required")
 ], captainController.registerCaptain);
+
+
+router.post("/login", [
+    body("email")
+        .isEmail().withMessage("Please enter a valid email address"),
+
+    body("password")
+        .notEmpty().withMessage("Password is required")
+], captainController.loginCaptain);
+
+router.get("/profile", authMiddleware.authCaptain, captainController.getCaptainProfile)
+
+router.get("/logout", authMiddleware.authCaptain, captainController.logoutCaptain);
 
 
 module.exports = router;
