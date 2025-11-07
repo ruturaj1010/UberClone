@@ -12,9 +12,9 @@ module.exports.registerCaptain = async (req, res, next) => {
     }
 
     const { fullname, email, password, vehicle } = req.body;
-
-    const captainExists = await captainModel.find({ email });
-
+    
+    const captainExists = await captainModel.findOne({ email });
+    
     if (captainExists) {
         return res.status(400).json({ message: "Captain already exits" })
     }
@@ -35,6 +35,7 @@ module.exports.registerCaptain = async (req, res, next) => {
 }
 
 module.exports.loginCaptain = async (req, res, next) => {
+
     const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
@@ -84,8 +85,7 @@ module.exports.logoutCaptain = async (req, res, next) => {
 
         res.clearCookie("token");
 
-        return res.status(200).json({ message: "captain logged out successfully" }
-        )
+        return res.status(200).json({ message: "captain logged out successfully" })
 
     } catch (error) {
         return res.status(500).json({ message: "Failed to logout captain" });
