@@ -24,7 +24,7 @@ const CaptainLogin = () => {
         />
 
         <form onSubmit={(e) => submitHandler(e)}>
-          <h3 className="text-lg font-medium mb-1">What's your email</h3>
+          <h3 className="text-base font-medium mb-1">What's your email</h3>
           <input
             className="w-full bg-[#eeee] border text-lg outline-none border-zinc-400 rounded px-4 py-2  placeholder:text-base"
             type="email"
@@ -38,7 +38,7 @@ const CaptainLogin = () => {
             required
           />
 
-          <h3 className="text-lg font-medium mt-5 mb-1">Enter your password</h3>
+          <h3 className="text-base font-medium mt-5 mb-1">Enter your password</h3>
           <input
             className="w-full bg-[#eeee] border text-lg outline-none border-zinc-400 rounded px-4 py-2 placeholder:text-base"
             type="password"
