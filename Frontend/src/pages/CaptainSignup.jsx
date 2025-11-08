@@ -11,8 +11,10 @@ const CaptainSignup = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     setCaptainData({
-      firstName: firstName,
-      lastName: lastName,
+      fullName : {
+        firstName: firstName,
+        lastName: lastName,
+      },
       email: email,
       password: password,
     });
@@ -100,7 +102,7 @@ const CaptainSignup = () => {
               to={"/captain-login"}
               className="pl-1 text-center font-medium text-blue-600 "
             >
-              LogIn here
+              Create Account
             </Link>
           </p>
         </form>
