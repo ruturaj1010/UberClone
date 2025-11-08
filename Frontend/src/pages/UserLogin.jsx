@@ -1,14 +1,33 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserDataContext } from "../context/UserContext";
+import axios from "axios";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
 
-  const submitHandler = (e) => {
+  const { user, setUser } = useContext(UserDataContext);
+
+  const navigate = useNavigate();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setUserData({ email: email, password: password });
+    const user = { 
+      email: email, 
+      password: password 
+    };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/login`,
+      user
+    );
+
+    if (response.status == 201) {
+      const data = response.data;
+      setUser(data.user);
+      navigate("/home");
+    }
     // console.log(userData);
     setEmail("");
     setPassword("");
@@ -38,7 +57,9 @@ const UserLogin = () => {
             required
           />
 
-          <h3 className="text-base font-medium mt-5 mb-1">Enter your password</h3>
+          <h3 className="text-base font-medium mt-5 mb-1">
+            Enter your password
+          </h3>
           <input
             className="w-full bg-[#eeee] border text-lg outline-none border-zinc-400 rounded px-4 py-2 placeholder:text-base"
             type="password"
