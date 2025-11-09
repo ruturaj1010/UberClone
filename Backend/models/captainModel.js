@@ -26,7 +26,7 @@ const captainSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        Select: false,
+        select: false,
         minlength: [6, "Password must be at least 6 characters long"]
     },
 
@@ -56,7 +56,7 @@ const captainSchema = new mongoose.Schema({
             required: true,
             min: [1, "Capacity must be at least 1"]
         },
-        vehicleType: {
+        type: {
             type: String,
             required: true,
             enum: ["car", "auto", "bike"],

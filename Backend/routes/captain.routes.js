@@ -32,7 +32,7 @@ router.post("/register", [
         .notEmpty().withMessage("Vehicle capacity is required")
         .isInt({ min: 1 }).withMessage("Capacity must be at least 1"),
 
-    body("vehicle.vehicleType")
+    body("vehicle.type")
         .notEmpty().withMessage("Vehicle type is required")
 ], captainController.registerCaptain);
 

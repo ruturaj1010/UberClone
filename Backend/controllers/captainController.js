@@ -21,7 +21,7 @@ module.exports.registerCaptain = async (req, res, next) => {
 
     const hashedPassword = await captainModel.hashPassword(password);
 
-    const captain = await captainService.createCaptain(fullname.firstname, fullname.lastname, email, hashedPassword, vehicle.color, vehicle.plate, vehicle.capacity, vehicle.vehicleType);
+    const captain = await captainService.createCaptain(fullname.firstname, fullname.lastname, email, hashedPassword, vehicle.color, vehicle.plate, vehicle.capacity, vehicle.type);
 
     if (!captain) {
         return res.status(500).json({ message: "Failed to register captain" });
