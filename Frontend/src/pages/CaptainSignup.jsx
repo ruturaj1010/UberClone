@@ -190,7 +190,7 @@ const CaptainSignup = () => {
               to={"/captain-login"}
               className="pl-1 text-center font-medium text-blue-600 "
             >
-              Create Account
+              logIn Account
             </Link>
           </p>
         </form>

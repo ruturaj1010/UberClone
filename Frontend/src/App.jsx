@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import UserProtectRoute from "./pages/UserProtectRoute";
 import UserLogout from "./pages/UserLogout";
 import CaptainHome from "./pages/CaptainHome";
+import CaptainProtectRoute from "./pages/CaptainProtectRoute";
 
 function App() {
   return (
@@ -36,7 +37,14 @@ function App() {
             </UserProtectRoute>
           }
         />
-        <Route path="/captain-home" element={<CaptainHome />} />
+        <Route
+          path="/captain-home"
+          element={
+            <CaptainProtectRoute>
+              <CaptainHome />
+            </CaptainProtectRoute>
+          }
+        />
         <Route path="*" element={<Start />} />
       </Routes>
     </>
