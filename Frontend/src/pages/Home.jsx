@@ -3,6 +3,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../components/LocationSearchPanel";
+import VehiclePanel from "../components/VehiclePanel";
+import ConfirmRide from "../components/ConfirmRide";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -10,8 +12,12 @@ const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
   const closePanel = useRef(null);
+
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const vehiclePanelOpenref = useRef(null);
+
+  const [confirmRidePanelOpen, setConfirmRidePanelOpen] = useState(false);
+  const confirmRideRef = useRef(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -43,6 +49,17 @@ const Home = () => {
       });
     },
     [vehiclePanelOpen]
+  );
+
+  useGSAP(
+    function () {
+      gsap.to(confirmRideRef.current, {
+        transform: confirmRidePanelOpen ? "translateY(0)" : "translateY(100%)",
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    },
+    [confirmRidePanelOpen]
   );
 
   return (
@@ -114,89 +131,17 @@ const Home = () => {
         ref={vehiclePanelOpenref}
         className="w-full overflow-y-auto translate-y-full fixed bottom-0 z-30 bg-white"
       >
-        <h3 className="text-xl pl-2 pt-2 mb-3 font-semibold">
-          Choose a vehicle
-        </h3>
+        <VehiclePanel
+          setConfirmRidePanelOpen={setConfirmRidePanelOpen}
+          setVehiclePanelOpen={setVehiclePanelOpen}
+        />
+      </div>
 
-        <div className=" flex justify-between items-start p-2 m-2 border-2 border-white active:border-black rounded-xl bg-gray-200">
-          <div className="flex justify-start items-start gap-4">
-            <img
-              className="h-12 w-14 object-center"
-              src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n"
-              alt="img"
-            />
-
-            <div className="flex flex-col leading-tight text-sm justify-center items-start">
-              <h4 className="font-semibold text-base">
-                UberGo{" "}
-                <span>
-                  <i className="ri-user-3-fill text-sm"></i> 4
-                </span>
-              </h4>
-              <p className="flex justify-start items-center gap-2 font-medium">
-                2 mins away{" "}
-                <span className="w-1.5 h-1.5 block rounded-full bg-black"></span>{" "}
-                <span>15:24</span>
-              </p>
-              <p className="text-gray-600 text-xs">Affortable, compact size</p>
-            </div>
-          </div>
-          <div className="pr-3 font-semibold text-lg">₹193</div>
-        </div>
-
-        <div className=" flex justify-between items-start p-2 m-2 border-2 border-white active:border-black rounded-xl bg-gray-200">
-          <div className="flex justify-start items-start gap-4">
-            <img
-              className="h-10 w-14 pt-2"
-              src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yYzdmYTE5NC1jOTU0LTQ5YjItOWM2ZC1hM2I4NjAxMzcwZjUucG5n"
-              alt="img"
-            />
-
-            <div className="flex flex-col leading-tight text-sm justify-center items-start">
-              <h4 className="font-semibold text-base">
-                Moto{" "}
-                <span>
-                  <i className="ri-user-3-fill text-sm"></i> 1
-                </span>
-              </h4>
-              <p className="flex justify-start items-center gap-2 font-medium">
-                3 mins away{" "}
-                <span className="w-1.5 h-1.5 block rounded-full bg-black"></span>{" "}
-                <span>15:24</span>
-              </p>
-              <p className="text-gray-600 text-xs">
-                Affortable, motorcycle ride
-              </p>
-            </div>
-          </div>
-          <div className="pr-3 font-semibold text-lg">₹80</div>
-        </div>
-
-        <div className=" flex justify-between items-start p-2 m-2 border-2 border-white active:border-black rounded-xl bg-gray-200">
-          <div className="flex justify-start items-start gap-4">
-            <img
-              className="h-10 w-14 pt-2"
-              src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8xZGRiOGM1Ni0wMjA0LTRjZTQtODFjZS01NmExMWEwN2ZlOTgucG5n"
-              alt="img"
-            />
-
-            <div className="flex flex-col leading-tight text-sm justify-center items-start">
-              <h4 className="font-semibold text-base">
-                Auto{" "}
-                <span>
-                  <i className="ri-user-3-fill text-sm"></i> 3
-                </span>
-              </h4>
-              <p className="flex justify-start items-center gap-2 font-medium">
-                2.5 mins away{" "}
-                <span className="w-1.5 h-1.5 block rounded-full bg-black"></span>{" "}
-                <span>15:24</span>
-              </p>
-              <p className="text-gray-600 text-xs">Affortable, compact size</p>
-            </div>
-          </div>
-          <div className="pr-3 font-semibold text-lg">₹120</div>
-        </div>
+      <div
+        className="w-full overflow-y-auto translate-y-full fixed bottom-0 z-40 bg-white"
+        ref={confirmRideRef}
+      >
+        <ConfirmRide setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
       </div>
     </div>
   );
