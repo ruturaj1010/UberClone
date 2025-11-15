@@ -1,23 +1,23 @@
-import React from "react";
+import React from 'react'
 
-const ConfirmRide = ({ setVehicleFoundPanelOpen, setConfirmRidePanelOpen }) => {
+const LookingForDriver = ({setVehicleFoundPanelOpen}) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
       <span className="absolute top-1 left-1/2 -translate-x-1/2">
         <i
-          onClick={() => setConfirmRidePanelOpen(false)}
+          onClick={() => setVehicleFoundPanelOpen(false)}
           className="ri-arrow-down-wide-line font-bold text-2xl"
         ></i>
       </span>
-      <h4 className="p-4 mt-5 text-lg font-semibold">Confirm your Vehicle</h4>
+      <h4 className="p-4 mt-5 text-lg font-semibold">Looking for Driver</h4>
 
       <div className="flex flex-col justify-start items-center">
-        <img
-          className=" w-56 h-28 object-cover rounded-lg mb-4"
+        <img className=" w-56 h-28 object-cover rounded-lg mb-4"
           src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n"
           alt="img"
         />
         <div className="w-full flex flex-col gap-4">
+    
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-map-pin-fill text-lg"></i>
             <div>
@@ -46,18 +46,9 @@ const ConfirmRide = ({ setVehicleFoundPanelOpen, setConfirmRidePanelOpen }) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            setVehicleFoundPanelOpen(true);
-            setConfirmRidePanelOpen(false);
-          }}
-          className="w-[95%] p-2 bg-green-500 rounded-lg text-white text-lg font-semibold"
-        >
-          Confirm
-        </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmRide;
+export default LookingForDriver

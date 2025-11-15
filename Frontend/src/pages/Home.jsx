@@ -5,6 +5,8 @@ import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../components/LocationSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
+import LookingForDriver from "../components/LookingForDriver";
+import WaitingForDriver from "../components/WaitingForDriver";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -18,6 +20,12 @@ const Home = () => {
 
   const [confirmRidePanelOpen, setConfirmRidePanelOpen] = useState(false);
   const confirmRideRef = useRef(null);
+
+  const [vehicleFoundPanelOpen, setVehicleFoundPanelOpen] = useState(false);
+  const lookingPanelRef = useRef(null);
+
+  const [waitingForDriverPanelOpen, setWaitingForDriverPanelOpen] = useState(false);
+  const waitingPanelRef = useRef(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -61,6 +69,30 @@ const Home = () => {
     },
     [confirmRidePanelOpen]
   );
+
+  useGSAP(
+    function () {
+      gsap.to(lookingPanelRef.current, {
+        transform: vehicleFoundPanelOpen ? "translateY(0)" : "translateY(100%)",
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    },
+    [vehicleFoundPanelOpen]
+  );
+
+  useGSAP(
+    function () {
+      gsap.to(waitingPanelRef.current, {
+        transform: waitingForDriverPanelOpen ? "translateY(0)" : "translateY(100%)",
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    },
+    [waitingForDriverPanelOpen]
+  );
+
+
 
   return (
     <div className="relative overflow-hidden">
@@ -141,7 +173,21 @@ const Home = () => {
         className="w-full overflow-y-auto translate-y-full fixed bottom-0 z-40 bg-white"
         ref={confirmRideRef}
       >
-        <ConfirmRide setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
+        <ConfirmRide setVehicleFoundPanelOpen={setVehicleFoundPanelOpen} setConfirmRidePanelOpen={setConfirmRidePanelOpen} />
+      </div>
+
+      <div
+        className="w-full overflow-y-auto translate-y-full fixed bottom-0 z-40 bg-white"
+        ref={lookingPanelRef}
+      >
+        <LookingForDriver setVehicleFoundPanelOpen={setVehicleFoundPanelOpen} />
+      </div>
+
+      <div
+        className="w-full overflow-y-auto fixed translate-y-full bottom-0 z-40 bg-white"
+        ref={waitingPanelRef}
+      >
+        <WaitingForDriver setWaitingForDriverPanelOpen={setWaitingForDriverPanelOpen} />
       </div>
     </div>
   );
