@@ -177,7 +177,6 @@ const CaptainSignup = () => {
           </div>
 
           <button
-            to="#"
             className="block w-full text-center cursor-pointer bg-black text-white py-2 px-3 mt-4 text-lg border-2 rounded"
             type="submit"
           >

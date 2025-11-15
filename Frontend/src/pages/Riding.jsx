@@ -17,8 +17,8 @@ const Riding = () => {
       <div className="w-screen h-1/2 overflow-y-auto p-4">
         <div className="flex items-center justify-between p-4">
           <img
-            className="h-12 w-12 rounded-full object-cover object-center"
-            src="https://www.jeancoutu.com/globalassets/revamp/photo/conseils-photo/20160302-01-reseaux-sociaux-profil/photo-profil_301783868.jpg"
+            className="h-12 w-16 object-cover object-center"
+            src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n"
             alt="img"
           />
           <div className="flex flex-col justify-center items-end font-semibold text-base">
