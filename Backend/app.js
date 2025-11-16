@@ -8,6 +8,7 @@ const main = require("./db/db");
 
 const userRoutes = require("./routes/user.routes");
 const captainRoutes = require("./routes/captain.routes");
+const mapRoutes =  require("./routes/maps.routes")
 
 main();
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/users", userRoutes);
 app.use("/captains", captainRoutes)
+app.use("/maps", mapRoutes);
 
 app.get("/", (req, res) => {
     res.send("Welcome to home page");
