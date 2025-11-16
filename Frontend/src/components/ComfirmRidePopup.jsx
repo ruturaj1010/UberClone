@@ -1,16 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const RidePopUp = ({setConfirmRidePanel, setRidePopupPanel}) => {
+const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
       <span className="absolute top-1 left-1/2 -translate-x-1/2">
         <i
-          onClick={() => setRidePopupPanel(false)}
+          onClick={() => setConfirmRidePanel(false)}
           className="ri-arrow-down-wide-line font-bold text-2xl"
         ></i>
       </span>
       <h4 className="px-4 py-2 mt-5 text-xl font-semibold">
-        New Ride Available!
+        Confirm Ride to Start!
       </h4>
 
       <div className="p-2 m-2 bg-yellow-300 rounded-lg flex justify-between items-center">
@@ -55,27 +56,24 @@ const RidePopUp = ({setConfirmRidePanel, setRidePopupPanel}) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            setConfirmRidePanel(true);
-            setRidePopupPanel(false);
-          }}
-          className="w-[95%] p-2 bg-green-500 rounded-lg text-white text-lg font-semibold"
+        <Link
+          to={"/captain-riding"}
+          className="w-[95%] p-2 bg-green-500 rounded-lg text-white text-lg text-center font-semibold"
         >
-          Accept
-        </button>
+          Confirm
+        </Link>
 
         <button
           onClick={() => {
-            setRidePopupPanel(false);
+            setConfirmRidePanel(false);
           }}
-          className="w-[95%] p-2 mt-2 bg-gray-400 rounded-lg text-white text-lg font-semibold"
+          className="w-[95%] p-2 mt-2 bg-red-500 rounded-lg text-white text-lg font-semibold"
         >
-          Ignore
+          Cancel
         </button>
       </div>
     </div>
   );
 };
 
-export default RidePopUp;
+export default ComfirmRidePopup;
