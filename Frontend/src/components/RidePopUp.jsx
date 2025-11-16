@@ -1,6 +1,6 @@
 import React from "react";
 
-const RidePopUp = ({setConfirmRidePanel, setRidePopupPanel}) => {
+const RidePopUp = ({ setConfirmRidePanel, setRidePopupPanel }) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
       <span className="absolute top-1 left-1/2 -translate-x-1/2">
@@ -55,24 +55,27 @@ const RidePopUp = ({setConfirmRidePanel, setRidePopupPanel}) => {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            setConfirmRidePanel(true);
-            setRidePopupPanel(false);
-          }}
-          className="w-[95%] p-2 bg-green-500 rounded-lg text-white text-lg font-semibold"
-        >
-          Accept
-        </button>
 
-        <button
-          onClick={() => {
-            setRidePopupPanel(false);
-          }}
-          className="w-[95%] p-2 mt-2 bg-gray-400 rounded-lg text-white text-lg font-semibold"
-        >
-          Ignore
-        </button>
+        <div className="w-full px-4 flex justify-center items-center gap-4">
+          <button
+            onClick={() => {
+              setRidePopupPanel(false);
+            }}
+            className="w-full px-4 py-2 bg-gray-400 rounded-lg text-white text-lg font-semibold"
+          >
+            Ignore
+          </button>
+
+          <button
+            onClick={() => {
+              setConfirmRidePanel(true);
+              setRidePopupPanel(false);
+            }}
+            className="w-full px-4 py-2 bg-green-500 rounded-lg text-white text-lg font-semibold"
+          >
+            Accept
+          </button>
+        </div>
       </div>
     </div>
   );

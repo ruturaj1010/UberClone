@@ -32,18 +32,12 @@ const CaptainHome = () => {
 
   return (
     <div className="w-screen h-screen">
-      <div className="w-full fixed top-0 flex justify-between items-center px-2">
+      <div className="fixed top-2 px-2">
         <img
           className="w-16 object-contain object-left"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Uber_logo_2018.png/1280px-Uber_logo_2018.png"
           alt="img"
         />
-        <Link
-          to="/captain-home"
-          className="w-[42px] h-10 m-2 rounded-full bg-gray-300 flex items-center justify-center shadow-md z-10"
-        >
-          <i className="ri-logout-box-r-line font-semibold text-xl"></i>
-        </Link>
       </div>
 
       <div className="h-4/6">

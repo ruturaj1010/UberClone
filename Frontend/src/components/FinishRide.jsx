@@ -1,27 +1,18 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
-const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
-  const [otp, setOtp] = useState("");
-
-  const navigate = useNavigate();
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    console.log(otp);
-    navigate("/captain-riding");
-  };
-
+const FinishRide = ({setFinishRidePanel}) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
-      <span className="absolute top-1 left-1/2 -translate-x-1/2">
+        <span className="absolute top-1 left-1/2 -translate-x-1/2">
         <i
-          onClick={() => setConfirmRidePanel(false)}
+          onClick={() => setFinishRidePanel(false)}
           className="ri-arrow-down-wide-line font-bold text-2xl"
         ></i>
       </span>
+      
       <h4 className="px-4 py-2 mt-5 text-xl font-semibold">
-        Confirm Ride to Start!
+        Finish this Ride
       </h4>
 
       <div className="p-2 m-2 bg-yellow-300 rounded-lg flex justify-between items-center">
@@ -36,7 +27,7 @@ const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
         <h4 className="text-md font-medium">2.2 KM</h4>
       </div>
 
-      <div className="flex flex-col justify-start items-center">
+      <div className="w-full flex flex-col justify-start items-center">
         <div className="w-full flex flex-col gap-2 p-2">
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-map-pin-fill text-lg"></i>
@@ -67,44 +58,19 @@ const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
           </div>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            submitHandler(e);
-          }}
-          className="w-full"
-        >
-          <input
-            type="text"
-            value={otp}
-            onChange={(e) => {
-              setOtp(e.target.value);
-            }}
-            className="w-[92%] px-4 py-2 m-4 border-2 rounded-lg text-xl bg-gray-100 outline-amber-200"
-            name="otp"
-            id="otp"
-            placeholder="Enter your otp"
-          />
-
-          <div className="px-4 flex justify-center items-center gap-4">
-            <button
-              type="submit"
-              className=" w-full px-4 py-2 bg-green-500 rounded-lg text-white text-lg text-center font-semibold"
-            >
-              Confirm
-            </button>
-            <button
-              onClick={() => {
-                setConfirmRidePanel(false);
-              }}
-              className=" w-full px-4 py-2 bg-red-500 rounded-lg text-white text-lg font-semibold"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+        <div className="w-full px-4 flex justify-center items-center gap-4">
+          <Link
+            to={"/captain-home"}
+            onClick={()=>{setFinishRidePanel(false)}}
+            className=" w-full px-4 py-2 bg-green-500 rounded-lg text-white text-lg text-center font-semibold"
+          >
+            Finish ride
+          </Link>
+        </div>
+        <p className="text-sm text-center leading-tight text-red-500 mt-2">Click on finish ride button if you have completed the payment</p>
       </div>
     </div>
   );
 };
 
-export default ComfirmRidePopup;
+export default FinishRide;
