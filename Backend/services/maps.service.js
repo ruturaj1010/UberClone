@@ -1,4 +1,5 @@
 const axios = require('axios');
+const crypto = require('crypto');
 
 module.exports.getAddressCoordinates = async (address) => {
   if (!address) throw new Error("Address is required.");
@@ -58,6 +59,64 @@ module.exports.getDistanceAndTime = async (origin, destination) => {
     };
   } catch (err) {
     console.error("ORS ERROR:", err.response?.data || err);
+    throw err;
+  }
+};
+
+function generatePlaceId(text) {
+  return crypto.createHash("md5").update(text).digest("hex");
+}
+
+module.exports.getSuggestions = async (query) => {
+  if (!query) throw new Error("Query is required.");
+
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+
+  try {
+    const response = await axios.get(url, {
+      headers: { "User-Agent": "your-app-name" }
+    });
+
+    return response.data.map((item) => {
+      const description = item.display_name;
+
+      // find offset of user query in suggestion text
+      const lowerDesc = description.toLowerCase();
+      const lowerQuery = query.toLowerCase();
+      const offset = lowerDesc.indexOf(lowerQuery);
+
+      return {
+        description: description,
+        place_id: generatePlaceId(description),
+        matched_substrings: offset !== -1 ? [
+          {
+            length: query.length,
+            offset: offset
+          }
+        ] : [],
+        structured_formatting: {
+          main_text: description.split(",")[0],
+          main_text_matched_substrings: offset !== -1 ? [
+            { length: query.length, offset: offset }
+          ] : [],
+          secondary_text: description.replace(description.split(",")[0] + ", ", "")
+        },
+        terms: description.split(",").map((part) => ({
+          offset: description.indexOf(part.trim()),
+          value: part.trim()
+        })),
+        types: ["geocode"],
+        geometry: {
+          location: {
+            lat: parseFloat(item.lat),
+            lng: parseFloat(item.lon)
+          }
+        }
+      };
+    });
+
+  } catch (err) {
+    console.error("SUGGESTIONS ERROR:", err.response?.data || err);
     throw err;
   }
 };

@@ -30,4 +30,10 @@ router.get(
   mapsController.getDistanceTime
 );
 
+router.get(
+  "/get-suggestions",
+  authMiddleware.authUser,
+  mapsController.getSuggestions
+);
+
 module.exports = router;
