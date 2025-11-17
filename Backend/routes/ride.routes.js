@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const { body, query } = require('express-validator');
 const ridesController = require('../controllers/ridesController');
 const authMiddleware = require('../middlewares/auth.middleware')
 
-router.post('/create',
+router.post('/create-ride',
     authMiddleware.authUser,
         [
             body('pickUp').not().isEmpty().withMessage('Pickup location is required'),
@@ -13,5 +13,14 @@ router.post('/create',
         ],
         ridesController.createRide
     );
+
+router.get('/get-fare', 
+    authMiddleware.authUser,
+    [
+        query('pickUp').isString().withMessage('Pickup location is required'),
+        query('destination').isString().withMessage('Destination is required')
+    ],
+    ridesController.getFare
+)
 
 module.exports = router;

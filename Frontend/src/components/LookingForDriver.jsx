@@ -1,6 +1,12 @@
-import React from 'react'
+import React from "react";
 
-const LookingForDriver = ({setVehicleFoundPanelOpen}) => {
+const LookingForDriver = ({
+  pickUp,
+  destination,
+  fare,
+  selectVehicle,
+  setVehicleFoundPanelOpen,
+}) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
       <span className="absolute top-1 left-1/2 -translate-x-1/2">
@@ -12,43 +18,36 @@ const LookingForDriver = ({setVehicleFoundPanelOpen}) => {
       <h4 className="p-4 mt-5 text-lg font-semibold">Looking for Driver</h4>
 
       <div className="flex flex-col justify-start items-center">
-        <img className=" w-56 h-28 object-cover rounded-lg mb-4"
+        <img
+          className=" w-56 h-28 object-cover rounded-lg mb-4"
           src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=956/height=538/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8yOWZiYjhiMC03NWIxLTRlMmEtODUzMy0zYTM2NGU3MDQyZmEucG5n"
           alt="img"
         />
         <div className="w-full flex flex-col gap-4">
-    
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-map-pin-fill text-lg"></i>
-            <div>
-              <h3 className="font-semibold">562/11-A</h3>
-              <p className="text-sm text-gray-600">
-                Kasaba Bawada, Kolhapur, Maharashtra
-              </p>
-            </div>
+            <p className="text-sm text-gray-900">{pickUp}</p>
           </div>
           <hr />
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-square-fill"></i>
-            <div>
-              <h3 className="font-semibold">Third wave coffee</h3>
-              <p className="text-sm text-gray-600">
-                Shop No. 5, Near City Pride, Kolhapur
-              </p>
-            </div>
+
+            <p className="text-sm text-gray-900">{destination}</p>
           </div>
           <hr />
           <div className="flex justify-start items-center gap-4 px-4 mb-5">
             <i className="ri-bank-card-2-fill"></i>
             <div>
-              <h3 className="font-semibold">₹193</h3>
+              <h3 className="font-semibold">
+                ₹{fare?.fares?.[selectVehicle] ?? "--"}
+              </h3>
               <p className="text-sm text-gray-600">Cash - cash</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LookingForDriver
+export default LookingForDriver;

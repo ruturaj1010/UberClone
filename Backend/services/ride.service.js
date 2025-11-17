@@ -20,32 +20,33 @@ async function calculateFare(pickUpAddress, destinationAddress) {
   const duration = Math.round(distanceTime.duration / 60); // minutes
 
   const rates = {
-    car: { base: 50, perKm: 15, perMin: 2 },
-    auto: { base: 30, perKm: 10, perMin: 1 },
-    bike: { base: 20, perKm: 8, perMin: 0.5 }
+    car:  { base: 50, perKm: 12,  perMin: 0.75 },
+    auto: { base: 30, perKm: 10,  perMin: 0.50 },
+    bike: { base: 20, perKm: 7,   perMin: 0.30 }
   };
 
-  function round2(n) {
-    return Math.round(n * 100) / 100;
-  }
+  const round2 = (n) => Math.round(n * 100) / 100;
 
-  function computeFare(rate) {
-    const raw = rate.base + distanceInKm * rate.perKm + duration * rate.perMin;
-    return round2(Math.max(raw, rate.base));
-  }
+  const computeFare = (rate) => {
+    const rawFare =
+      rate.base +
+      distanceInKm * rate.perKm +
+      duration * rate.perMin;
 
-  const fares = {
-    car: computeFare(rates.car),
-    auto: computeFare(rates.auto),
-    bike: computeFare(rates.bike)
+    return round2(rawFare);
   };
 
   return {
-    fares,
+    fares: {
+      car: computeFare(rates.car),  
+      auto: computeFare(rates.auto),
+      bike: computeFare(rates.bike)
+    },
     distanceKm: round2(distanceInKm),
     durationMinutes: duration
   };
 }
+module.exports.calculateFare = calculateFare;
 
 function createOtp(length) {
     if (!Number.isInteger(length) || length <= 0) {
