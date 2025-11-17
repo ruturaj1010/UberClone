@@ -1,31 +1,70 @@
 const axios = require('axios');
 const crypto = require('crypto');
 
+
+async function geocodeNominatim(address) {
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
+
+  const res = await axios.get(url, {
+    headers: { "User-Agent": "your-app-name" }
+  });
+
+  if (res.data.length === 0) return null;
+
+  return {
+    latitude: parseFloat(res.data[0].lat),
+    longitude: parseFloat(res.data[0].lon)
+  };
+}
+
+async function geocodePhoton(address) {
+  const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(address)}&limit=1`;
+
+  const res = await axios.get(url);
+
+  if (!res.data.features || res.data.features.length === 0) return null;
+
+  const coords = res.data.features[0].geometry.coordinates;
+  return {
+    latitude: coords[1],
+    longitude: coords[0]
+  };
+}
+
+async function geocodeLocationIQ(address) {
+  const key = process.env.LOCATIONIQ_KEY;
+  if (!key) return null;
+
+  const url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${encodeURIComponent(address)}&format=json&limit=1`;
+
+  const res = await axios.get(url);
+
+  if (res.data.length === 0) return null;
+
+  return {
+    latitude: parseFloat(res.data[0].lat),
+    longitude: parseFloat(res.data[0].lon)
+  };
+}
+
 module.exports.getAddressCoordinates = async (address) => {
   if (!address) throw new Error("Address is required.");
 
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`;
+  // try Nominatim
+  const fromNominatim = await geocodeNominatim(address);
+  if (fromNominatim) return fromNominatim;
 
-  try {
-    const response = await axios.get(url, {
-      headers: { "User-Agent": "your-app-name" }
-    });
+  // try Photon
+  const fromPhoton = await geocodePhoton(address);
+  if (fromPhoton) return fromPhoton;
 
-    if (response.data.length > 0) {
-      const loc = response.data[0];
-      return {
-        latitude: parseFloat(loc.lat),
-        longitude: parseFloat(loc.lon)
-      };
-    } else {
-      throw new Error("Unable to find coordinates for the given address.");
-    }
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
+  // try LocationIQ
+  const fromLocationIQ = await geocodeLocationIQ(address);
+  if (fromLocationIQ) return fromLocationIQ;
+
+  // all failed
+  throw new Error("Unable to find coordinates for the given address.");
 };
-
 
 module.exports.getDistanceAndTime = async (origin, destination) => {
   if (!origin || !destination) {
