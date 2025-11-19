@@ -34,9 +34,33 @@ const CaptainHome = () => {
     });
   }, [confirmRidePanel]);
 
-  useEffect(()=>{
-    socket.emit("join", {userId : captain._id, userType : "captain"})
-  },[]);
+  useEffect(() => {
+    socket.emit("join", { userId: captain._id, userType: "captain" });
+
+    const updateLocation = () => {
+      if (!navigator.geolocation) {
+        console.log("Geolocation is NOT supported in this browser");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log("Location fetched:", position);
+
+        socket.emit("update-location-captain", {
+          userId: captain._id,
+          location: {
+            ltd: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        });
+      });
+    };
+
+    const locationInterval = setInterval(updateLocation, 10000);
+    updateLocation();
+
+    return () => clearInterval(locationInterval);
+  }, []);
 
   return (
     <div className="w-screen h-screen">

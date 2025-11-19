@@ -65,10 +65,10 @@ const captainSchema = new mongoose.Schema({
 
     location: {
         ltd: {
-            type: Number,
+            type: Number
         },
         lng: {
-            type: Number,
+            type: Number
         }
     }
 })
@@ -84,7 +84,7 @@ captainSchema.methods.comparePassword = async function (password) {
 }
 
 captainSchema.statics.hashPassword = async function (password) {
-    return await bcrypt.hash(password,10);
+    return await bcrypt.hash(password, 10);
 }
 
 const captainModel = mongoose.model("captain", captainSchema);

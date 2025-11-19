@@ -1,5 +1,6 @@
 const rideService = require("../services/ride.service");
 const { validationResult } = require("express-validator");
+const mapService = require("../services/maps.service")
 
 module.exports.createRide = async (req, res) =>{
     const errors = validationResult(req);
@@ -18,7 +19,14 @@ module.exports.createRide = async (req, res) =>{
             destination,
             vehicleType
         });
-        return res.status(201).json({ ride });
+        res.status(201).json({ ride });
+
+        const pickUpCoord = await mapService.getAddressCoordinates(pickUp);
+        console.log(pickUpCoord);
+
+        const captainsRadius = await mapService.getCaptainsInRadius(pickUpCoord.latitude , pickUpCoord.longitude, 100);
+        console.log(captainsRadius);
+
     } catch (error) {
         console.error("Error creating ride:", error);
         return res.status(500).json({ error: "Internal Server Error" });

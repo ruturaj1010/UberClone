@@ -1,5 +1,6 @@
 const axios = require('axios');
 const crypto = require('crypto');
+const captainModel = require("../models/captainModel");
 
 
 async function geocodeNominatim(address) {
@@ -158,4 +159,17 @@ module.exports.getSuggestions = async (query) => {
     console.error("SUGGESTIONS ERROR:", err.response?.data || err);
     throw err;
   }
+};
+
+module.exports.getCaptainsInRadius = async (ltd, lng, radius) => {
+
+  const captains = await captainModel.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [ [ltd, lng], radius/6378.2 ]
+      }
+    }
+  });
+
+  return captains;
 };
