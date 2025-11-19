@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -7,7 +8,8 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
-import axios from "axios";
+import { SocketDataContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext";
 
 const Home = () => {
   const [pickUp, setPickUp] = useState("");
@@ -16,6 +18,9 @@ const Home = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [fare, setFare] = useState({});
   const [selectVehicle, setSelectVehicle] = useState("");
+
+  const { user } = useContext(UserDataContext);
+  const { socket } = useContext(SocketDataContext);
 
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = useRef(null);
@@ -30,8 +35,7 @@ const Home = () => {
   const [vehicleFoundPanelOpen, setVehicleFoundPanelOpen] = useState(false);
   const lookingPanelRef = useRef(null);
 
-  const [waitingForDriverPanelOpen, setWaitingForDriverPanelOpen] =
-    useState(false);
+  const [waitingForDriverPanelOpen, setWaitingForDriverPanelOpen] = useState(false);
   const waitingPanelRef = useRef(null);
 
   useGSAP(
@@ -174,6 +178,10 @@ const Home = () => {
     fetchSuggestions();
   }, [pickUp, destination, activeField]);
 
+  useEffect(()=>{
+    socket.emit("join", { userId : user._id, userType : "user"});
+  },[]);
+
   return (
     <div className="relative overflow-hidden">
       <img
@@ -297,7 +305,8 @@ const Home = () => {
           destination={destination}
           fare={fare}
           selectVehicle={selectVehicle}
-          setVehicleFoundPanelOpen={setVehicleFoundPanelOpen} />
+          setVehicleFoundPanelOpen={setVehicleFoundPanelOpen}
+        />
       </div>
 
       <div

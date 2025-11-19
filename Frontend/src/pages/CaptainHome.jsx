@@ -1,34 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CaptainDetails from "../components/CaptainDetails";
 import RidePopUp from "../components/RidePopUp";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ConfirmRidePopup from "../components/ComfirmRidePopup";
+import { CaptainDataContext } from "../context/CaptainContext";
+import { SocketDataContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
-
   const [ridePopupPanel, setRidePopupPanel] = useState(true);
   const ridePanelRef = useRef(null);
 
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
-  const confirmridePanelRef = useRef(null)
+  const confirmridePanelRef = useRef(null);
 
-  useGSAP(()=>{
-    gsap.to(ridePanelRef.current,{
+  const { captain } = useContext(CaptainDataContext);
+  const { socket } = useContext(SocketDataContext);
+
+  useGSAP(() => {
+    gsap.to(ridePanelRef.current, {
       transform: ridePopupPanel ? "translateY(0)" : "translateY(100%)",
-      duration:0.5,
-      ease:"power2.out"
-    })
+      duration: 0.5,
+      ease: "power2.out",
+    });
   }, [ridePopupPanel]);
 
-  useGSAP(()=>{
-    gsap.to(confirmridePanelRef.current,{
+  useGSAP(() => {
+    gsap.to(confirmridePanelRef.current, {
       transform: confirmRidePanel ? "translateY(0)" : "translateY(100%)",
-      duration:0.5,
-      ease:"power2.out"
-    })
-  },[confirmRidePanel]);
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  }, [confirmRidePanel]);
+
+  useEffect(()=>{
+    socket.emit("join", {userId : captain._id, userType : "captain"})
+  },[]);
 
   return (
     <div className="w-screen h-screen">
@@ -55,7 +63,10 @@ const CaptainHome = () => {
         ref={ridePanelRef}
         className="w-full overflow-y-auto translate-y-full fixed bottom-0 z-10 bg-white"
       >
-        <RidePopUp setConfirmRidePanel={setConfirmRidePanel} setRidePopupPanel={setRidePopupPanel}/>
+        <RidePopUp
+          setConfirmRidePanel={setConfirmRidePanel}
+          setRidePopupPanel={setRidePopupPanel}
+        />
       </div>
 
       <div
@@ -64,7 +75,6 @@ const CaptainHome = () => {
       >
         <ConfirmRidePopup setConfirmRidePanel={setConfirmRidePanel} />
       </div>
-
     </div>
   );
 };

@@ -14,7 +14,7 @@ const Start = () => {
           <h1 className="text-2xl font-bold mb-3 ">Get started with Uber</h1>
           <Link
             to="/login"
-            className="flex justify-center items-center bg-black text-zinc-50 w-full py-2 text-[22px] font-semibold border-2 rounded"
+            className="flex justify-center items-center rounded-lg bg-black text-zinc-50 w-full py-2 text-[22px] font-semibold border-2"
           >
             Continue
           </Link>
