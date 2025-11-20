@@ -9,7 +9,7 @@ import { CaptainDataContext } from "../context/CaptainContext";
 import { SocketDataContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
-  const [ridePopupPanel, setRidePopupPanel] = useState(true);
+  const [ridePopupPanel, setRidePopupPanel] = useState(false);
   const ridePanelRef = useRef(null);
 
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
@@ -56,11 +56,22 @@ const CaptainHome = () => {
       });
     };
 
-    const locationInterval = setInterval(updateLocation, 10000);
+    const locationInterval = setInterval(updateLocation, 15000);
     updateLocation();
 
     return () => clearInterval(locationInterval);
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("new-ride", (rideData) => {
+      console.log("NEW RIDE RECEIVED:", rideData);
+      setRidePopupPanel(true);
+    });
+
+    return () => socket.off("new-ride");
+  }, [socket]);
 
   return (
     <div className="w-screen h-screen">
