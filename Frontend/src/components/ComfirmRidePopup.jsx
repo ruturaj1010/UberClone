@@ -1,15 +1,31 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const ComfirmRidePopup = ({ ride, setConfirmRidePanel }) => {
+const ComfirmRidePopup = ({ ride, setConfirmRidePanel,setRidePopupPanel }) => {
   const [otp, setOtp] = useState("");
 
   const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(otp);
-    navigate("/captain-riding");
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/rides/start-ride/`, {
+        params: {
+          rideId: ride._id,
+          otp: otp,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (response.status == 200) {
+      setConfirmRidePanel(false);
+      setRidePopupPanel(false);
+      navigate("/riding");
+    }
   };
 
   return (
@@ -32,9 +48,7 @@ const ComfirmRidePopup = ({ ride, setConfirmRidePanel }) => {
             alt="img"
           />
           <h4 className="text-lg font-medium">
-            {ride?.user.fullname.firstname +
-              " " +
-              ride?.user.fullname.lastname}
+            {ride?.user.fullname.firstname + " " + ride?.user.fullname.lastname}
           </h4>
         </div>
         <h4 className="text-md font-medium">{ride?.distance} KM</h4>

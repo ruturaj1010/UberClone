@@ -134,6 +134,7 @@ const CaptainHome = () => {
         <ConfirmRidePopup
           ride={ride}
           setConfirmRidePanel={setConfirmRidePanel}
+          setRidePopupPanel={setRidePopupPanel}
         />
       </div>
     </div>

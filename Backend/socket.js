@@ -15,17 +15,17 @@ function initializeSocket(server) {
   console.log("Socket.io initialized");
 
   io.on("connection", (socket) => {
-    console.log("Socket connected:", socket.id);
+    // console.log("Socket connected:", socket.id);
 
     socket.on("join", async (data) => {
       const { userId, userType } = data;
 
       if (userType === "user") {
         await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
-        console.log(`User ${userId} joined with socket ID: ${socket.id}`);
+        // console.log(`User ${userId} joined with socket ID: ${socket.id}`);
       } else if (userType === "captain") {
         await captainModel.findByIdAndUpdate(userId, { socketId: socket.id });
-        console.log(`Captain ${userId} joined with socket ID: ${socket.id}`);
+        // console.log(`Captain ${userId} joined with socket ID: ${socket.id}`);
       }
     });
 
@@ -46,7 +46,7 @@ function initializeSocket(server) {
     })
 
     socket.on("disconnect", () => {
-      console.log("Socket disconnected:", socket.id);
+      // console.log("Socket disconnected:", socket.id);
     });
   });
 }
