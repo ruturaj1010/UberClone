@@ -9,7 +9,7 @@ const LookingForDriver = ({
 }) => {
   return (
     <div className="w-screen overflow-x-hidden mb-4">
-      <span className="absolute top-1 left-1/2 -translate-x-1/2">
+      <span className="absolute top-0 left-1/2 -translate-x-1/2">
         <i
           onClick={() => setVehicleFoundPanelOpen(false)}
           className="ri-arrow-down-wide-line font-bold text-2xl"

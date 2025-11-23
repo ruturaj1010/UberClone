@@ -81,7 +81,7 @@ const VehiclePanel = ({
               </span>
             </h4>
             <p className="flex justify-start items-center gap-2 font-medium">
-              3 mins away{" "}
+              {fare.durationMinutes} min away{" "}
               <span className="w-1.5 h-1.5 block rounded-full bg-black"></span>{" "}
               <span>15:24</span>
             </p>
@@ -114,7 +114,7 @@ const VehiclePanel = ({
               </span>
             </h4>
             <p className="flex justify-start items-center gap-2 font-medium">
-              2.5 mins away{" "}
+              {fare.durationMinutes} mins away{" "}
               <span className="w-1.5 h-1.5 block rounded-full bg-black"></span>{" "}
               <span>15:24</span>
             </p>

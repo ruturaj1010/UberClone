@@ -1,3 +1,4 @@
+const { error } = require("console");
 const rideModel = require("../models/rideModel");
 const mapsService = require("./maps.service");
 const crypto = require("crypto");
@@ -88,3 +89,22 @@ module.exports.createRide = async ({ user, pickUp, destination, vehicleType }) =
 
   return await ride.save();
 };
+
+module.exports.confirmRide = async ({rideId, captainId }) =>{
+  if(!rideId ) {
+    throw new Error("ride id is invalid")
+  }
+
+  await rideModel.findOneAndUpdate({_id : rideId }, {
+    status : "accepted",
+    captain : captainId
+  })
+
+  const ride = await rideModel.findOne({_id : rideId}).populate('user');
+
+  if(!ride) { 
+    throw new Error("ride not found")
+  }
+
+  return ride;
+}

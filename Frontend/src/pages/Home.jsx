@@ -182,6 +182,11 @@ const Home = () => {
     socket.emit("join", { userId : user._id, userType : "user"});
   },[]);
 
+  socket.on('ride-confirmed', ride => {
+    setVehicleFoundPanelOpen(false);
+    setWaitingForDriverPanelOpen(true);
+  })
+
   return (
     <div className="relative overflow-hidden">
       <img

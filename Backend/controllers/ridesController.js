@@ -1,8 +1,9 @@
 const rideService = require("../services/ride.service");
 const { validationResult } = require("express-validator");
 const mapService = require("../services/maps.service")
-const {sendMessageToSocketId} = require("../socket")
-const rideModel = require("../models/rideModel")
+const { sendMessageToSocketId } = require("../socket")
+const rideModel = require("../models/rideModel");
+const { Socket } = require("socket.io");
 
 module.exports.createRide = async (req, res) => {
     const errors = validationResult(req);
@@ -34,7 +35,7 @@ module.exports.createRide = async (req, res) => {
         const fullRide = await rideModel.findById(ride._id).populate("user");
 
         captainsInRadius.forEach(async (captain) => {
-            
+
             sendMessageToSocketId(
                 captain.socketId,
                 "new-ride",
@@ -53,7 +54,7 @@ module.exports.createRide = async (req, res) => {
     }
 };
 
-module.exports.getFare = async (req, res ) =>{
+module.exports.getFare = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -71,3 +72,21 @@ module.exports.getFare = async (req, res ) =>{
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+module.exports.confirmRide = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const { rideId } = req.body;
+
+    try {
+        const ride = await rideService.confirmRide({ rideId, captainId: req.captain._id });
+        sendMessageToSocketId(ride.user.socketId, 'ride-confirmed', ride)
+        res.status(200).json(ride);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

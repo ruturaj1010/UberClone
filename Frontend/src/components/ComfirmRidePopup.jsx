@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
+const ComfirmRidePopup = ({ ride, setConfirmRidePanel }) => {
   const [otp, setOtp] = useState("");
 
   const navigate = useNavigate();
@@ -31,37 +31,31 @@ const ComfirmRidePopup = ({ setConfirmRidePanel }) => {
             src="https://www.shutterstock.com/image-photo/close-head-shot-portrait-preppy-600nw-1433809418.jpg"
             alt="img"
           />
-          <h4 className="text-lg font-medium">Swara Sawant</h4>
+          <h4 className="text-lg font-medium">
+            {ride?.user.fullname.firstname +
+              " " +
+              ride?.user.fullname.lastname}
+          </h4>
         </div>
-        <h4 className="text-md font-medium">2.2 KM</h4>
+        <h4 className="text-md font-medium">{ride?.distance} KM</h4>
       </div>
 
       <div className="flex flex-col justify-start items-center">
         <div className="w-full flex flex-col gap-2 p-2">
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-map-pin-fill text-lg"></i>
-            <div>
-              <h3 className="font-semibold">562/11-A</h3>
-              <p className="text-sm text-gray-600">
-                Kasaba Bawada, Kolhapur, Maharashtra
-              </p>
-            </div>
+            <p className="text-sm text-gray-600">{ride?.pickUp}</p>
           </div>
           <hr />
           <div className="flex justify-start items-center gap-4 px-4 py-1">
             <i className="ri-square-fill"></i>
-            <div>
-              <h3 className="font-semibold">Third wave coffee</h3>
-              <p className="text-sm text-gray-600">
-                Shop No. 5, Near City Pride, Kolhapur
-              </p>
-            </div>
+            <p className="text-sm text-gray-600">{ride?.destination}</p>
           </div>
           <hr />
           <div className="flex justify-start items-center gap-4 px-4 ">
             <i className="ri-bank-card-2-fill"></i>
             <div>
-              <h3 className="font-semibold">₹193</h3>
+              <h3 className="font-semibold">₹{ride?.fare}</h3>
               <p className="text-sm text-gray-600">Cash - cash</p>
             </div>
           </div>
