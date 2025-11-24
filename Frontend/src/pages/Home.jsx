@@ -11,6 +11,7 @@ import WaitingForDriver from "../components/WaitingForDriver";
 import { SocketDataContext } from "../context/SocketContext";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
 
 const Home = () => {
   const [pickUp, setPickUp] = useState("");
@@ -206,12 +207,7 @@ const Home = () => {
         alt="img"
       />
       <div className="h-screen w-screen">
-        {/* {image for temporary use} */}
-        <img
-          className="h-full w-full object-cover"
-          src="https://media.geeksforgeeks.org/wp-content/uploads/20220218205322/WhatsAppImage20220218at54912PM-304x660.jpeg"
-          alt="map img"
-        />
+        <LiveTracking />
       </div>
 
       <div className=" w-full h-screen flex flex-col justify-end absolute bottom-0 z-20">
