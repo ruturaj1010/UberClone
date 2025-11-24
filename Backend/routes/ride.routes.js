@@ -38,4 +38,9 @@ router.get('/start-ride', authMiddleware.authCaptain,
     ridesController.startRide
 )
 
+router.post('/end-ride', authMiddleware.authCaptain,
+    body('rideId').isMongoId().withMessage("Invalid ride id"),
+    ridesController.endRide
+)
+
 module.exports = router;

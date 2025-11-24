@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 
 const WaitingForDriver = ({ ride, setWaitingForDriverPanelOpen }) => {
-  useEffect(() => {
-    console.log(ride);
-  }, [ride]);
+  
   return (
     <div className="w-screen overflow-x-hidden mb-4">
       <span className="absolute top-1 left-1/2 -translate-x-1/2">

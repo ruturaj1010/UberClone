@@ -195,7 +195,7 @@ const Home = () => {
 
   socket.on('ride-started', ride => {
     setWaitingForDriverPanelOpen(false);
-    navigate('/confirm-riding')
+    navigate('/riding', {state : {ride : ride}})
   })
 
   return (
