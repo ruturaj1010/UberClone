@@ -1,130 +1,99 @@
-import React from "react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-export function LiveMap({
-  zoom = 16,
-  tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-}) {
+export default function LiveTracking({ pickupCoords, destinationCoords }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
-  const markerRef = useRef(null);
+  const userMarkerRef = useRef(null);
   const watchIdRef = useRef(null);
 
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl:
-      "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  });
-
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!mapRef.current && containerRef.current) {
+      mapRef.current = L.map(containerRef.current, {
+        center: [20.5937, 78.9629], // India default
+        zoom: 16
+      });
 
-    // initialize map
-    mapRef.current = L.map(containerRef.current, {
-      center: [0, 0],
-      zoom,
-      zoomControl: true,
-    });
-
-    // add OpenStreetMap tile layer
-    L.tileLayer(tileUrl, {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(mapRef.current);
-
-    // try to get a quick initial position (one-off) then start watchPosition
-    const setPosition = (lat, lng, heading = null) => {
-      const latlng = [lat, lng];
-      if (!markerRef.current) {
-        markerRef.current = L.marker(latlng).addTo(mapRef.current);
-      } else {
-        markerRef.current.setLatLng(latlng);
-      }
-
-      // rotate marker icon if heading available (simple CSS transform)
-      if (heading != null) {
-        const iconElem = markerRef.current.getElement();
-        if (iconElem) {
-          iconElem.style.transformOrigin = "center";
-          iconElem.style.transform = `rotate(${heading}deg)`;
-        }
-      }
-
-      mapRef.current.setView(latlng, Math.max(mapRef.current.getZoom(), zoom));
-    };
-
-    const onPositionSuccess = (pos) => {
-      const { latitude, longitude, heading } = pos.coords;
-      setPosition(latitude, longitude, heading);
-    };
-
-    const onPositionError = (err) => {
-      // keep behavior minimal: log error
-      // In production, surface a UI message to the user
-      // console.warn("Geolocation error:", err);
-    };
-
-    // one-shot getCurrentPosition to center map quickly (optional)
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => onPositionSuccess(pos),
-        () => {},
-        { enableHighAccuracy: true }
-      );
-
-      // start watching position for live updates
-      watchIdRef.current = navigator.geolocation.watchPosition(
-        onPositionSuccess,
-        onPositionError,
-        {
-          enableHighAccuracy: true,
-          maximumAge: 5000,
-          timeout: 10000,
-        }
-      );
-    } else {
-      // no geolocation available
-      // (could show fallback UI if desired)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(mapRef.current);
     }
 
-    // cleanup on unmount
-    return () => {
-      if (watchIdRef.current != null && navigator.geolocation) {
-        navigator.geolocation.clearWatch(watchIdRef.current);
-      }
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, [tileUrl, zoom]);
+    if (!navigator.geolocation) return;
 
-  // the container will grow to fill its parent; style as needed where used
+    // Center the map to the user's current location immediately
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const { latitude, longitude, heading } = pos.coords;
+        updateUserMarker(latitude, longitude, heading);
+      },
+      err => console.log("Geolocation (initial) error:", err),
+      { enableHighAccuracy: true }
+    );
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      pos => {
+        const { latitude, longitude, heading } = pos.coords;
+        updateUserMarker(latitude, longitude, heading);
+      },
+      err => console.log("Geolocation (watch) error:", err),
+      { enableHighAccuracy: true }
+    );
+
+    return () => {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      mapRef.current?.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  const updateUserMarker = (lat, lng, heading) => {
+    const latlng = [lat, lng];
+
+    if (!userMarkerRef.current) {
+      userMarkerRef.current = L.marker(latlng).addTo(mapRef.current);
+    } else {
+      userMarkerRef.current.setLatLng(latlng);
+    }
+
+    if (heading !== null) {
+      const el = userMarkerRef.current.getElement();
+      if (el) {
+        el.style.transformOrigin = "center";
+        el.style.transform = `rotate(${heading}deg)`;
+      }
+    }
+
+    mapRef.current.setView(latlng, 17);
+  };
+
+  // Add pickup marker
+  useEffect(() => {
+    if (!pickupCoords || !mapRef.current) return;
+
+    if (!pickupCoords.marker) {
+      pickupCoords.marker = L.marker(pickupCoords).addTo(mapRef.current);
+    } else {
+      pickupCoords.marker.setLatLng(pickupCoords);
+    }
+  }, [pickupCoords]);
+
+  // Add destination marker
+  useEffect(() => {
+    if (!destinationCoords || !mapRef.current) return;
+
+    if (!destinationCoords.marker) {
+      destinationCoords.marker = L.marker(destinationCoords).addTo(mapRef.current);
+    } else {
+      destinationCoords.marker.setLatLng(destinationCoords);
+    }
+  }, [destinationCoords]);
+
   return (
     <div
       ref={containerRef}
-      style={{
-      width: "100%",
-      height: "100vh",
-      position: "absolute",
-      top: 0,
-      left: 0,
-      zIndex: 5,
-    }}
+      className="w-full h-full absolute top-0 left-0 z-0"
     />
   );
 }
-const LiveTracking = () => {
-  return (
-    <div className="absolute top-0 left-0 h-screen w-screen z-10">
-      <LiveMap />
-    </div>
-  );
-};
-
-export default LiveTracking;

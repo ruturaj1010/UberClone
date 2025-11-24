@@ -184,20 +184,20 @@ const Home = () => {
     fetchSuggestions();
   }, [pickUp, destination, activeField]);
 
-  useEffect(()=>{
-    socket.emit("join", { userId : user._id, userType : "user"});
-  },[]);
+  useEffect(() => {
+    socket.emit("join", { userId: user._id, userType: "user" });
+  }, []);
 
-  socket.on('ride-confirmed', ride => {
+  socket.on("ride-confirmed", (ride) => {
     setRide(ride);
     setVehicleFoundPanelOpen(false);
     setWaitingForDriverPanelOpen(true);
-  })
+  });
 
-  socket.on('ride-started', ride => {
+  socket.on("ride-started", (ride) => {
     setWaitingForDriverPanelOpen(false);
-    navigate('/riding', {state : {ride : ride}})
-  })
+    navigate("/riding", { state: { ride: ride } });
+  });
 
   return (
     <div className="relative overflow-hidden">
@@ -207,7 +207,10 @@ const Home = () => {
         alt="img"
       />
       <div className="h-screen w-screen">
-        <LiveTracking />
+        <LiveTracking
+          pickupCoords={fare?.pickupCoords || null}
+          destinationCoords={fare?.destinationCoords || null}
+        />
       </div>
 
       <div className=" w-full h-screen flex flex-col justify-end absolute bottom-0 z-20">

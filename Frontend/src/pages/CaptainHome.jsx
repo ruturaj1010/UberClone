@@ -8,6 +8,7 @@ import ConfirmRidePopup from "../components/ComfirmRidePopup";
 import { CaptainDataContext } from "../context/CaptainContext";
 import { SocketDataContext } from "../context/SocketContext";
 import axios from "axios";
+import LiveTracking from "../components/LiveTracking";
 
 const CaptainHome = () => {
   const [ridePopupPanel, setRidePopupPanel] = useState(false);
@@ -104,12 +105,8 @@ const CaptainHome = () => {
         />
       </div>
 
-      <div className="h-4/6">
-        <img
-          className="h-full w-full object-cover object-center"
-          src="https://media.geeksforgeeks.org/wp-content/uploads/20220218205322/WhatsAppImage20220218at54912PM-304x660.jpeg"
-          alt="map img"
-        />
+      <div className="h-4/6 relative overflow-hidden">
+        <LiveTracking pickupCoords={ride?.pickup} destinationCoords={ride?.destination} />
       </div>
       <div className="w-screen h-2/6 overflow-y-auto p-4">
         <CaptainDetails />
