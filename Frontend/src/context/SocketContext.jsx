@@ -2,7 +2,13 @@ import React, { createContext, useEffect } from "react";
 import { io } from "socket.io-client";
 export const SocketDataContext = createContext();
 
-const socket = io(`${import.meta.env.VITE_BASE_URL}`);
+const socketUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
+const socket = io(socketUrl, {
+  transports: ['websocket', 'polling'],
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionAttempts: 5
+});
 
 const SocketContext = ({ children }) => {
     useEffect(() => {
