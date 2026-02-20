@@ -22,10 +22,8 @@ function App() {
         <Route path="/" element={<Start />} />
         <Route path="/signup" element={<UserSignup />} />
         <Route path="/login" element={<UserLogin />} />
-        <Route path="/riding" element={<Riding />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
         <Route path="/captain-login" element={<CaptainLogin />} />
-        <Route path="/captain-riding" element={<CaptainRiding />} />
         <Route
           path="/home"
           element={
@@ -58,6 +56,23 @@ function App() {
             </CaptainProtectRoute>
           }
         />
+        <Route
+          path="/riding"
+          element={
+            <UserProtectRoute>
+              <Riding />
+            </UserProtectRoute>
+          }
+        />
+        <Route
+          path="/captain-riding"
+          element={
+            <CaptainProtectRoute>
+              <CaptainRiding />
+            </CaptainProtectRoute>
+          }
+        />
+
         <Route path="*" element={<Start />} />
       </Routes>
     </>
